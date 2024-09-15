@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: areenab/frontend-app
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+  backend:
+    image: areenab/backend-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/taskmanager
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Aa123456aa
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: Aa123456aa
+      MYSQL_DATABASE: taskmanager
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
